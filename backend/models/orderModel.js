@@ -72,15 +72,13 @@ const orderSchema = mongoose.Schema({
     required: true,
     default: false,
   },
-  deliverAt: {
+  deliveredAt: {
     type: Date,
-    required: true,
-    default: 0.0,
   },
 }, {
   timestamps: true,
 });
 
-const User = mongoose.model('User', userSchema);
+const Order = mongoose.model('Order', orderSchema);
 
-export default User;
+export default Order;
