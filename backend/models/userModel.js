@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import bcrpyt from 'bcryptjs';
 
 const userSchema = mongoose.Schema({
   name: {
@@ -21,6 +22,19 @@ const userSchema = mongoose.Schema({
   }
 }, {
   timestamps: true,
+});
+
+userSchema.methods.matchPassword = async function(enteredPassword) {
+  return await bcrpyt.compare(enteredPassword, this.password);
+};
+
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) {
+    next();
+  }
+
+  const salt = await bcrpyt.genSalt(10);
+  this.password = await bcrpyt.hash(this.password, salt);
 });
 
 const User = mongoose.model('User', userSchema);
